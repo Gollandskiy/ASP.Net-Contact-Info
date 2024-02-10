@@ -1,0 +1,42 @@
+﻿@model DZ4_10._02._2024_.Models.Contact
+
+@{
+    ViewData["Title"] = "Contacts";
+}
+
+<h1>Contacts</h1>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<div>
+    <form asp-action="ContactsView" method="post">
+        <div class="form-group">
+            <label asp-for="NameContact" class="control-label"></label>
+            <input asp-for="NameContact" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Telephone" class="control-label"></label>
+            <input asp-for="Telephone" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="AltTelephone" class="control-label"></label>
+            <input asp-for="AltTelephone" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
