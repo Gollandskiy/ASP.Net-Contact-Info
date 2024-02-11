@@ -7,4 +7,8 @@
     <RootNamespace>DZ4_10._02._2024_</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
 </Project>
