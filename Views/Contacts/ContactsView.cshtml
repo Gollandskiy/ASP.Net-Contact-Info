@@ -1,63 +1,62 @@
-﻿@model List<DZ4_10._02._2024_.Models.Contact>
+﻿    @model List<DZ4_10._02._2024_.Models.Contact>
 
-@{
-    ViewData["Title"] = "Contacts";
-}
+    @{
+        ViewData["Title"] = "Contacts";
+    }
 
-<h1>Contacts</h1>
+    <h1>Contacts</h1>
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.ErrorMessage
-    </div>
-}
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.ErrorMessage
+        </div>
+    }
 
-@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-{
-    <div class="alert alert-success" role="alert">
-        @ViewBag.SuccessMessage
-    </div>
-}
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+        </div>
+    }
 
-@if (Model != null && Model.Any())
-{
-    <div>
-        <form asp-action="ContactsView" method="post">
-            @foreach (var contact in Model)
-            {
+    @if (Model != null && Model.Any())
+    {
+        <div>
+            <form asp-action="ContactsView" method="post">
+                @foreach (var contact in Model)
+                {
+                    <div class="form-group">
+                        <label asp-for="@contact.NameContact" class="control-label"></label>
+                        <input asp-for="@contact.NameContact" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@contact.Telephone" class="control-label"></label>
+                        <input asp-for="@contact.Telephone" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@contact.AltTelephone" class="control-label"></label>
+                        <input asp-for="@contact.AltTelephone" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@contact.Email" class="control-label"></label>
+                        <input asp-for="@contact.Email" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@contact.Description" class="control-label"></label>
+                        <textarea asp-for="@contact.Description" class="form-control"></textarea>
+                    </div>
+                }
                 <div class="form-group">
-                    <label asp-for="@contact.NameContact" class="control-label"></label>
-                    <input asp-for="@contact.NameContact" class="form-control" value="@contact.NameContact" />
+                    <input type="submit" value="Submit" class="btn btn-primary" />
                 </div>
-                <div class="form-group">
-                    <label asp-for="@contact.Telephone" class="control-label"></label>
-                    <input asp-for="@contact.Telephone" class="form-control" value="@contact.Telephone" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="@contact.AltTelephone" class="control-label"></label>
-                    <input asp-for="@contact.AltTelephone" class="form-control" value="@contact.AltTelephone" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="@contact.Email" class="control-label"></label>
-                    <input asp-for="@contact.Email" class="form-control" value="@contact.Email" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="@contact.Description" class="control-label"></label>
-                    <textarea asp-for="@contact.Description" class="form-control">@contact.Description</textarea>
-                </div>
-            }
-            <div class="form-group">
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-}
+            </form>
+        </div>
+    }
+    <form asp-action="ImportContactsFromFile" method="post">
+        <button type="submit" class="btn btn-primary">Импорт из JSON</button>
+    </form>
 
-<form asp-action="ImportContactsFromFile" method="post">
-    <button type="submit" class="btn btn-primary">Импорт из JSON</button>
-</form>
-
-<form asp-action="SaveContactsToFile" method="post">
-    <button type="submit" class="btn btn-primary">Экспорт в JSON</button>
-</form>
+    <form asp-action="SaveContactsToFile" method="post">
+        <button type="submit" class="btn btn-primary">Экспорт в JSON</button>
+    </form>

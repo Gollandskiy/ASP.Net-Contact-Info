@@ -12,25 +12,25 @@ namespace DZ4_10._02._2024_.Controllers
     {
         private readonly IWebHostEnvironment _hostingEnvironment;
 
+        private List<Contact> _contacts { get; set; }
+
         public ContactController(IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
+            _contacts = new List<Contact>();
         }
 
         public IActionResult ContactsView()
         {
-            List<Contact> contacts = new List<Contact>
+            _contacts.Add(new Contact
             {
-                new Contact
-                {
-                    NameContact = "John Doe",
-                    Telephone = "123-456-7890",
-                    AltTelephone = "987-654-3210",
-                    Email = "john.doe@example.com",
-                    Description = "This is a test contact."
-                }
-            };
-            return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                NameContact = "John Doe",
+                Telephone = "123-456-7890",
+                AltTelephone = "987-654-3210",
+                Email = "john.doe@example.com",
+                Description = "This is a test contact."
+            });
+            return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@ namespace DZ4_10._02._2024_.Controllers
             if (contacts == null || contacts.Count == 0)
             {
                 ViewBag.ErrorMessage = "Please fill in all required fields.";
-                return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
             }
             foreach (var contact in contacts)
             {
@@ -48,63 +48,55 @@ namespace DZ4_10._02._2024_.Controllers
                     string.IsNullOrEmpty(contact.Email))
                 {
                     ViewBag.ErrorMessage = "Please fill in all required fields.";
-                    return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                    return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
                 }
                 if (contact.NameContact.Length < 5)
                 {
                     ViewBag.ErrorMessage = "The name is too short.";
-                    return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                    return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
                 }
                 if (contact.Telephone.Length < 10)
                 {
                     ViewBag.ErrorMessage = "The telephone is too short.";
-                    return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                    return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
                 }
                 if (contact.Email.Length < 5)
                 {
                     ViewBag.ErrorMessage = "The email is too short.";
-                    return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                    return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
                 }
             }
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult SaveContactsToFile(List<Contact> contacts)
+        public IActionResult SaveContactsToFile()
         {
             try
             {
-                Console.WriteLine("Метод SaveContactsToFile был вызван");
-                Console.WriteLine($"Количество контактов: {contacts.Count}");
-
                 string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "contacts.json");
-
-                string json = JsonConvert.SerializeObject(contacts);
-
+                string json = JsonConvert.SerializeObject(_contacts);
                 System.IO.File.WriteAllText(filePath, json);
 
-                ViewBag.SuccessMessage = "Контакты успешно сохранены в файл.";
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/json", "contacts.json");
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = $"Ошибка при сохранении контактов: {ex.Message}";
+                return RedirectToAction("ContactsView");
             }
-
-            return ContactsView();
         }
 
         public IActionResult ImportContactsFromFile()
         {
             try
             {
+                ContactsView();
                 string filePath = Path.Combine(_hostingEnvironment.WebRootPath, "contacts.json");
-
                 string json = System.IO.File.ReadAllText(filePath);
-
-                List<Contact> contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
-
+                List<Contact> _contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
                 ViewBag.SuccessMessage = "Контакты успешно импортированы из файла.";
-                return View("~/Views/Contacts/ContactsView.cshtml", contacts);
+                return View("~/Views/Contacts/ContactsView.cshtml", _contacts);
             }
             catch (Exception ex)
             {

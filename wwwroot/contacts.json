@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "NameContact": "Nikita",
+    "Telephone": "321-654-7222",
+    "AltTelephone": "111-222-3334",
+    "Email": "Nikitos@example.com",
+    "Description": "Да-да я, лучший из лучших!"
+  }
+]
